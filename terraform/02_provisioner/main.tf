@@ -169,7 +169,6 @@ resource "aws_instance" "web" {
 
   key_name = aws_key_pair.my-keypair.key_name
 
-  # TODO: This bit does not yet work
   provisioner "remote-exec" {
     inline = [
       "whoami",
@@ -180,7 +179,6 @@ resource "aws_instance" "web" {
       user        = "ubuntu"
       host        = self.public_ip
       private_key = tls_private_key.ssh.private_key_pem
-      host_key    = tls_private_key.ssh.public_key_pem
     }
   }
 }

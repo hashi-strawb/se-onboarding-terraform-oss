@@ -96,13 +96,7 @@ resource "aws_security_group" "ec2_instance_connect" {
 }
 
 # Now create the EC2 instance
-
-module "ec2_instance" {
-  source  = "terraform-aws-modules/ec2-instance/aws"
-  version = "~> 3.0"
-
-  name = "StrawbTest - ec2 instance"
-
+resource "aws_instance" "web" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t3.micro"
   vpc_security_group_ids = [
@@ -111,9 +105,12 @@ module "ec2_instance" {
   # Public, so I can easily connect to it and look around
   # In Production, you'd want this private
   subnet_id = module.vpc.public_subnets[0]
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
-
 output "ec2_connect_url" {
-  value = "https://eu-west-2.console.aws.amazon.com/ec2/v2/connect/ubuntu/${module.ec2_instance.id}"
+  value = "https://eu-west-2.console.aws.amazon.com/ec2/v2/connect/ubuntu/${aws_instance.web.id}"
 }

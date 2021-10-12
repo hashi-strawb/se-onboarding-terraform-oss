@@ -1,5 +1,15 @@
 # Demonstration of Terraform OSS
 
+Now that you have completed the previous modules, you are now ready to perform the Terraform OSS technical tasks.    Once you are ready, you will need to demonstrate each of the tasks to your peers.
+
+To make the most of this activity, be sure you can: 
+
+* Explain what Terraform plan, apply, and destroy does.
+* Explain how Terraform knows what resources exist?
+* Review the completed technical tasks with your SE Buddy before the final demo. 
+* Can you explain what you have done?
+
+
 Here is a list of tasks to complete.  Schedule a one-hour session to include at least two of your peers (check w/ Manager on peer recommendations) to demonstrate each of the tasks below.  
 1. Write code to deploy a VPC/Resource Group and EC2 instance/Azure virtual machine using the OSS CLI.  (Choose AWS, Azure, GCP.  Cloud doesn’t matter).
 2. Install a web server or similar software on the VM using a provisioner.

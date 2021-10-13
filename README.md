@@ -21,8 +21,8 @@ Here is a list of tasks to complete.  Schedule a one-hour session to include at 
 6. Tear down the environment, and rewrite it to deploy to multiple regions.
 	* [terraform/03_multiregion](terraform/03_multiregion)
 7. Next, instead of using a provisioner, define the VM in Packer, and specify the created image in your Terraform code.  Does multi-region work with Packer?
-	* TODO: [packer](packer)
-	* TODO: [terraform/04_packer](terraform/04_packer)
+	* [packer](packer)
+	* [terraform/04_packer](terraform/04_packer)
 8. What are some advantages of Packer?  What are some disadvantages?  
 9. We just used a Terraform + Packer workflow.  Can you explain how we could use these tools to set up immutable infrastructure?  What else might we need?
 
@@ -39,7 +39,7 @@ Ensure the remote workspace exists, and has valid AWS credentials.
 If you're a HashiCorp employee, you can run:
 
 ```
-doormat -r && doormat aws --account se_demos_dev --tf-push --tf-organization hashi_strawb_testing --tf-workspace se-onboarding-terraform-oss
+doormat --smoke-test || doormat -r && doormat aws --account se_demos_dev --tf-push --tf-organization hashi_strawb_testing --tf-workspace se-onboarding-terraform-oss
 ```
 
 If you're feeling especially majestic, you can even configure the Terraform workspace + push creds with the Terraform CLI
@@ -49,4 +49,11 @@ export TERRAFORM_CONFIG=~/.terraform.d/credentials.tfrc.json
 terraform login
 terraform init
 terraform apply
+```
+
+
+To build the Packer AMI, we're not using HCP Packer just yet, so we need local creds:
+
+```
+doormat --smoke-test || doormat -r && eval $(doormat aws --account se_demos_dev)
 ```

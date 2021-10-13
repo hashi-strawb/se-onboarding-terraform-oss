@@ -193,6 +193,7 @@ resource "aws_instance" "web" {
 
   provisioner "remote-exec" {
     inline = [
+      "sudo apt-get -yq update",
       "sudo apt-get -yq install nginx",
     ]
 

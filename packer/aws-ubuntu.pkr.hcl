@@ -64,4 +64,9 @@ build {
       "sudo apt-get -yq install nginx",
     ]
   }
+
+  provisioner "file" {
+    source      = "index.html"
+    destination = "/var/www/html/index.html"
+  }
 }

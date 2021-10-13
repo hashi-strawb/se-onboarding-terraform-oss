@@ -139,6 +139,27 @@ resource "aws_security_group" "inbound_ssh" {
   }
 }
 
+# Allow inbound HTTP access on standard port
+# In Production, you'd want to configure SSL etc.
+# potentially run behind a load balancer of some kind.
+# you know, usual production stuff.
+#
+# But for this demo, this works fine.
+resource "aws_security_group" "inbound_http" {
+  name        = "inbound_http"
+  description = "Allow inbound HTTP access"
+
+  vpc_id = module.vpc.vpc_id
+
+  ingress {
+    from_port        = "80"
+    to_port          = "80"
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+}
+
 
 # Create an SSH key
 resource "tls_private_key" "ssh" {
@@ -159,6 +180,7 @@ resource "aws_instance" "web" {
     aws_security_group.ec2_instance_connect.id,
     aws_security_group.outbound_http.id,
     aws_security_group.inbound_ssh.id,
+    aws_security_group.inbound_http.id,
   ]
 
   subnet_id = module.vpc.public_subnets[0]
@@ -171,7 +193,7 @@ resource "aws_instance" "web" {
 
   provisioner "remote-exec" {
     inline = [
-      "whoami",
+      "sudo apt-get -yq install nginx",
     ]
 
     connection {
@@ -185,4 +207,8 @@ resource "aws_instance" "web" {
 
 output "ec2_connect_url" {
   value = "https://eu-west-2.console.aws.amazon.com/ec2/v2/connect/ubuntu/${aws_instance.web.id}"
+}
+
+output "web_server_url" {
+  value = "http://${aws_instance.web.public_ip}"
 }

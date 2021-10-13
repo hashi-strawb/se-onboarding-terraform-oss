@@ -58,15 +58,16 @@ build {
     "source.amazon-ebs.ubuntu",
   ]
 
+  provisioner "file" {
+    source      = "index.html"
+    destination = "/home/ubuntu/index.html"
+  }
+
   provisioner "shell" {
     inline = [
       "sudo apt-get -yq update",
       "sudo apt-get -yq install nginx",
+      "sudo mv /home/ubuntu/index.html /var/www/html/index.html",
     ]
-  }
-
-  provisioner "file" {
-    source      = "index.html"
-    destination = "/var/www/html/index.html"
   }
 }

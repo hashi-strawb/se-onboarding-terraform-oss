@@ -18,15 +18,10 @@ resource "tfe_workspace" "se-onboarding-terraform-oss" {
   execution_mode = "remote"
 }
 
-# Provide TFC with AWS credentials
-resource "null_resource" "aws-creds" {
-  # Run every time
-  triggers = {
-    timestamp = timestamp()
-  }
-
-  provisioner "local-exec" {
-    command     = "doormat --smoke-test || doormat -r && doormat aws --account se_demos_dev --tf-push --tf-organization hashi_strawb_testing --tf-workspace ${tfe_workspace.se-onboarding-terraform-oss.name}"
-    interpreter = ["bash", "-c"]
-  }
+module "creds" {
+  source        = "git@github.com:hashi-strawb/tf-module-tfc-aws-doormat.git"
+  aws_account   = "se_demos_dev"
+  tfc_org       = tfe_workspace.se-onboarding-terraform-oss.organization
+  tfc_workspace = tfe_workspace.se-onboarding-terraform-oss.name
 }
+
